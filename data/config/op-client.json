@@ -1,0 +1,5 @@
+[
+  {"id":  1, "operation":  "OP01", "client":  "rework" },
+  {"id":  2, "operation":  "OP02", "client":  "rework" },
+  {"id":  3, "operation":  "OP03", "client":  "presence-check" }
+]

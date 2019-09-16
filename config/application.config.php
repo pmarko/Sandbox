@@ -8,15 +8,17 @@
 return array(
     'modules' => array(
         'Application',
-        'Client',
-        'Client01',
-        'Client02',
+        'Lift',
+        //'Client',
+        //'Client01',
+        //'Client02',
         'ZendDeveloperTools'
     ),
     'module_listener_options' => array(
         'module_paths' => array(
             './module',
-            './module01',
+            //'./module01', // damian client on dispatch demo
+            './module02',   // lift, the training application
             './vendor',
         ),
         'config_glob_paths' => array(

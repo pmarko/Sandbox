@@ -1,0 +1,12 @@
+body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+
+.navbar-inverse {
+    background-image: linear-gradient(to bottom, #65FF00 0, #65FF00 100%);
+}
+
+.navbar-brand {
+    color: #000 !important;
+}

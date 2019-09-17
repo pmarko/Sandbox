@@ -3,10 +3,14 @@ namespace Lift;
 
 use Lift\Controller\IndexController;
 use Lift\Controller\UserController;
+use Lift\Form\UserRegistrationForm;
 use Zend\Filter\Callback;
 use Zend\Validator\StringLength;
 
 return [
+    'service_manager' => [
+
+    ],
     'validators' => [
         'factories' => [
             'GreaterThan5' => function($pm){
@@ -25,11 +29,25 @@ return [
             }
         ]
     ],
+    'form_elements' => [
+        'invokables' => [
+            'Lift\Form\UserRegistrationForm' => UserRegistrationForm::class
+        ]
+    ],
     'controllers' => [
         'invokables' => [
             'Lift\Controller\Index' => IndexController::class,
-            'Lift\Controller\User'  => UserController::class
+            //'Lift\Controller\User'  => UserController::class
         ],
+        'factories' => [
+            'Lift\Controller\User' => function($serviceLocator){
+                $userRegistrationForm = $serviceLocator
+                    ->getServiceLocator()
+                    ->get('FormElementManager')
+                    ->get('Lift\Form\UserRegistrationForm');
+                return new UserController($userRegistrationForm);
+            }
+        ]
     ],
     'router' => [
         'routes' => [

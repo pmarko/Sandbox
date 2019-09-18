@@ -5,6 +5,7 @@ namespace Lift\Controller;
 
 
 use Lift\Form\UserRegistrationForm;
+use Lift\Model\UserModel;
 use Zend\Db\Sql\Predicate\In;
 use Zend\Debug\Debug;
 use Zend\Filter\FilterChain;
@@ -15,6 +16,7 @@ use Zend\Form\Element\Submit;
 use Zend\Form\Element\Text as TextElement;
 use Zend\Form\Form;
 use Zend\Form\FormInterface;
+use Zend\Hydrator\ClassMethods;
 use Zend\InputFilter\Factory as InputFilterFactory;
 use Zend\InputFilter\Input;
 use Zend\InputFilter\InputFilter;
@@ -36,10 +38,10 @@ class UserController extends AbstractActionController
 
     /**
      * UserController constructor.
-     * @param FormInterface $this->>userRegistrationForm
+     * @param FormInterface $userRegistrationForm
      */
-    public function __construct(FormInterface $userRegistrationForm){
-
+    public function __construct(FormInterface $userRegistrationForm)
+    {
         $this->userRegistrationForm = $userRegistrationForm;
     }
 
@@ -61,6 +63,7 @@ class UserController extends AbstractActionController
         }
 
         $viewModel = new ViewModel();
+
         $viewModel->setVariable('user_registration_form', $this->userRegistrationForm);
 
         return $viewModel;

@@ -6,82 +6,26 @@ namespace Lift\Form;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilterProviderInterface;
 
-class UserRegistrationForm extends Form implements InputFilterProviderInterface
+class UserRegistrationForm extends Form
 {
     public function init()
     {
         $this->add([
-            'name' => 'user_name',
-            'type' => 'Text',
+           'name' => 'user_registration',
+           'type' => 'Lift\Form\Fieldset\UserRegistrationFieldset',
             'options' => [
-                'label' => 'User Name'
+                'use_as_base_fieldset' => true
             ]
         ]);
 
         $this->add([
-            'name' => 'first_name',
-            'type' => 'Text',
-            'options' => [
-                'label' => 'First Name'
-            ]
-        ]);
-
-        $this->add([
-            'name' => 'last_name',
-            'type' => 'Text',
-            'options' => [
-                'label' => 'Last Name'
-            ]
-        ]);
-
-        $this->add([
-            'name' => 'password',
-            'type' => 'Password',
-            'options' => [
-                'label' => 'Password'
-            ]
-        ]);
-
-        $this->add([
-            'name' => 'password_confirm',
-            'type' => 'Password',
-            'options' => [
-                'label' => 'Confirm password'
-            ]
-        ]);
-
-        $this->add([
-            'name' => 'Submit',
+            'name' => 'submit',
             'type' => 'Submit',
             'attributes' => [
                 'value' => 'Register'
             ]
         ]);
-    }
 
-    /**
-     * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
-     * @return array
-     */
-    public function getInputFilterSpecification()
-    {
-        return [
-            'user_name' => [
-                'validators' => [
-                    [
-                        'name' => 'StringLength',
-                        'options' => [
-                            'min' => 10
-                        ]
-                    ]
-                ],
-                'filters' => [
-                    [
-                        'name' => 'UppercaseFirst'
-                    ]
-                ]
-            ]
-        ];
+        $this->setAttribute('class', 'form-horizontal');
     }
 }

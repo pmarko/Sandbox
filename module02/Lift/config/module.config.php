@@ -1,8 +1,11 @@
 <?php
 namespace Lift;
 
+use Lift\Controller\AuthController;
 use Lift\Controller\IndexController;
 use Lift\Controller\UserController;
+use Lift\Form\Fieldset\UserFieldset;
+use Lift\Form\Fieldset\UserRegistrationFieldset;
 use Lift\Form\UserRegistrationForm;
 use Zend\Filter\Callback;
 use Zend\Validator\StringLength;
@@ -31,13 +34,15 @@ return [
     ],
     'form_elements' => [
         'invokables' => [
+            'Lift\Form\Fieldset\UserFieldset' => UserFieldset::class,
+            'Lift\Form\Fieldset\UserRegistrationFieldset' => UserRegistrationFieldset::class,
             'Lift\Form\UserRegistrationForm' => UserRegistrationForm::class
         ]
     ],
     'controllers' => [
         'invokables' => [
             'Lift\Controller\Index' => IndexController::class,
-            //'Lift\Controller\User'  => UserController::class
+            'Lift\Controller\Auth'  => AuthController::class
         ],
         'factories' => [
             'Lift\Controller\User' => function($serviceLocator){
@@ -72,6 +77,26 @@ return [
                             ],
                         ],
                     ],
+                    'login' => [
+                        'type' => 'Zend\Mvc\Router\Http\Literal',
+                        'options' => [
+                            'route'    => '/login',
+                            'defaults' => [
+                                'controller' => 'Lift\Controller\Auth',
+                                'action'     => 'login',
+                            ],
+                        ],
+                    ],
+                    'logout' => [
+                        'type' => 'Zend\Mvc\Router\Http\Literal',
+                        'options' => [
+                            'route'    => '/logout',
+                            'defaults' => [
+                                'controller' => 'Lift\Controller\Auth',
+                                'action'     => 'logout',
+                            ],
+                        ],
+                    ]
 //                    'user' => [
 ////                        'type' => 'Zend\Mvc\Router\Http\Literal',
 ////                        'options' => [

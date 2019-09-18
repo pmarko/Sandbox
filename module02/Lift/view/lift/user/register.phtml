@@ -1,45 +1,63 @@
-<!-- <div class="row">
+<?php
+$this->user_registration_form->prepare();
+$userRegistrationFs = $this->user_registration_form->get('user_registration');
+$userFs = $userRegistrationFs->get('user');
+?>
+
+<div class="row">
     <div class="col">
-        <form class="form-horizontal" method="post">
+        <?=$this->form()->openTag($this->user_registration_form)?>
             <div class="form-group">
-                <label class="col-sm-2 control-label">Username</label>
+                <label class="col-sm-2 control-label">
+                    <?=$this->formLabel($userFs->get('user_name'))?>
+                </label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" placeholder="Username" name="user_name" value="<?=$this->values['user_name']?>">
-                    <?=(array_key_exists('user_name', $this->errors)) ? "<div>" .implode('<br>', $this->errors['user_name']). "</div>" : '';?>
+                    <?=$this->formText($userFs->get('user_name')->setAttribute('class', 'form-control'))?>
+                    <?=$this->formElementErrors($userFs->get('user_name'))?>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">First Name</label>
+                <label class="col-sm-2 control-label">
+                    <?=$this->formLabel($userFs->get('first_name'))?>
+                </label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" placeholder="First Name" name="first_name" value="<?=$this->values['first_name']?>">
-                    <?=(array_key_exists('first_name', $this->errors)) ? "<div>" .implode('<br>', $this->errors['first_name']). "</div>" : '';?>
+                    <?=$this->formText($userFs->get('first_name')->setAttribute('class', 'form-control'))?>
+                    <?=$this->formElementErrors($userFs->get('first_name'))?>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">Last Name</label>
+                <label class="col-sm-2 control-label"><?=$this->formLabel($userFs->get('last_name'))?></label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" placeholder="Last Name" name="last_name">
+                    <?=$this->formText($userFs->get('last_name')->setAttribute('class', 'form-control'))?>
+                    <?=$this->formElementErrors($userFs->get('last_name'))?>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">Password</label>
+                <label class="col-sm-2 control-label"><?=$this->formLabel($userFs->get('password'))?></label>
                 <div class="col-sm-10">
-                    <input type="password" class="form-control" placeholder="Password" name="password">
+                    <?=$this->formPassword($userFs->get('password')->setAttribute('class', 'form-control'))?>
+                    <?=$this->formElementErrors($userFs->get('password'))?>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">Confirm password</label>
+                <label class="col-sm-2 control-label"><?=$this->formLabel($userFs->get('password_confirm'))?></label>
                 <div class="col-sm-10">
-                    <input type="password" class="form-control" placeholder="Password" name="confirm_password">
+                    <?=$this->formPassword($userFs->get('password_confirm')->setAttribute('class', 'form-control'))?>
+                    <?=$this->formElementErrors($userFs->get('password_confirm'))?>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><?=$this->formLabel($userRegistrationFs->get('found_at'))?></label>
+                <div class="col-sm-10">
+                    <?=$this->formText($userRegistrationFs->get('found_at')->setAttribute('class', 'form-control'))?>
+                    <?=$this->formElementErrors($userRegistrationFs->get('found_at'))?>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-default">Register</button>
+                    <?=$this->formSubmit($this->user_registration_form->get('submit'))?>
                 </div>
             </div>
-        </form>
+        <?=$this->form()->closeTag()?>
     </div>
-</div> -->
-
-<?=$this->form($this->user_registration_form);?>
+</div>

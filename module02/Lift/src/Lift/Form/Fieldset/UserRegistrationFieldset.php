@@ -25,11 +25,12 @@ class UserRegistrationFieldset extends Fieldset implements InputFilterProviderIn
 
         $this->add([
             'name' => 'found_at',
-            'type' => 'Text',
+            'type' => 'Lift\Form\Element\FoundAtSelect',
             'options' => [
-                'label' => 'How did you found us?'
+                'label' => 'How did you found us?',
             ]
         ]);
+
     }
 
     /**

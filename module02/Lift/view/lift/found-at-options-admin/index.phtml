@@ -1,0 +1,30 @@
+<?php
+$this->form->prepare();
+?>
+
+<button onclick="return add_category()">Add</button>
+
+<?= $this->form($this->form);?>
+
+<script>
+
+    function add_category() {
+        var currentCount = $('form > fieldset > fieldset').length;
+        var template = $('form > fieldset > span').data('template');
+        template = template.replace(/__index__/g, currentCount);
+        $('form > fieldset').append(template);
+        $('form > fieldset > fieldset > button').on('click', function(){
+            $(this).parent().remove();
+        });
+        return false;
+    }
+
+    // function remove(el) {
+    //     $(el).parent().remove();
+    // }
+
+    $('.remove-btn').on('click', function(){
+        $(this).parent().remove();
+    });
+
+</script>

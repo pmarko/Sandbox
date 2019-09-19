@@ -18,6 +18,8 @@ class Module
                 $e->getViewModel()->setTemplate('layout/lift');
             }
         });
+
+        //$e->getViewModel()->setVariable('is_logged_in', true);
     }
 
     public function getConfig()

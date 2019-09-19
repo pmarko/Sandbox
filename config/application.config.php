@@ -12,7 +12,8 @@ return array(
         //'Client',
         //'Client01',
         //'Client02',
-        'ZendDeveloperTools'
+        'ZendDeveloperTools',
+        'Zend\Navigation'
     ),
     'module_listener_options' => array(
         'module_paths' => array(

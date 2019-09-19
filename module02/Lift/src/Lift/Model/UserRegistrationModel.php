@@ -56,11 +56,9 @@ class UserRegistrationModel
      * @param string $foundAt
      * @return $this
      */
-    public function setFoundAt(string $foundAt): self
+    public function setDiscoveredAt(string $foundAt): self
     {
         $this->foundAt = $foundAt;
         return $this;
     }
-
-
 }

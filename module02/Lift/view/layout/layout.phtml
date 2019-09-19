@@ -23,26 +23,9 @@
         ; ?>
     </head>
     <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="<?php echo $this->url('lift') ?>"><img src="<?php echo $this->basePath('img/zf2-logo.png') ?>" alt="Zend Framework 2"/>&nbsp;<?php echo $this->translate('LIFT!') ?></a>
-            </div>
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="<?php echo $this->url('lift') ?>"><?php echo $this->translate('Home') ?></a></li>
-                    <li>
-                        <a href="<?=$this->url('lift/register')?>">REGISTER</a>
-                    </li>
-                </ul>
-            </div><!--/.nav-collapse -->
-        </div>
-    </nav>
+
+    <?= $this->navigation('Zend\Navigation\Lift')->menu()->setPartial('partials/layout/navbar')?>
+
     <div class="container">
         <?php echo $this->content; ?>
         <hr>
@@ -51,7 +34,6 @@
         </footer>
     </div> <!-- /container -->
     <?php echo $this->inlineScript() ?>
-    </body>
     </body>
 
 </html>

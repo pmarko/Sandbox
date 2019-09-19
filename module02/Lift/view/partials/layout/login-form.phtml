@@ -1,0 +1,25 @@
+<?php
+    $this->form->prepare();
+    $this->form->setAttribute('class', 'navbar-form navbar-left');
+    $userLoginFs = $this->form->get('user_login');
+?>
+
+<ul class="nav navbar-nav navbar-right">
+    <?=$this->form()->openTag($this->form)?>
+        <div class="form-group">
+            <?=$this->formText(
+                $userLoginFs->get('user_name')
+                    ->setAttribute('class', 'form-control')
+                    ->setAttribute('placeholder', 'Username')
+            )?>
+        </div>
+        <div class="form-group">
+            <?=$this->formPassword(
+                $userLoginFs->get('password')
+                    ->setAttribute('class', 'form-control')
+                    ->setAttribute('placeholder', 'Password')
+            )?>
+        </div>
+        <?=$this->formSubmit($this->form->get('submit')->setAttribute('class', 'btn btn-default'))?>
+    <?=$this->form()->closeTag()?>
+</ul>

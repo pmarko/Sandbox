@@ -76,12 +76,12 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
                             'min' => 5
                         ],
                     ],
-                    [
-                        'name' => 'Int',
-//                        'options' => [
-//                            'max' => 100
-//                        ]
-                    ]
+//                    [
+////                        'name' => 'Int',
+////                        'options' => [
+////                            'max' => 100
+////                        ]
+//                    ]
                 ],
                 'filters' => [
                     [

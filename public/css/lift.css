@@ -10,3 +10,11 @@ body {
 .navbar-brand {
     color: #000 !important;
 }
+
+.navbar-nav>li>a {
+    color: #000 !important;
+}
+
+.navbar-nav>li.active>a {
+    color: #FFF !important;
+}

@@ -2,10 +2,18 @@
 namespace Lift;
 
 use Client\Mvc\EventListener\OperationClientEventListener;
+use Lift\Acl\AclInterface as LiftAclInterface;
+use Lift\Acl\ConfigAcl;
+use Lift\Mvc\EventListener\NavigationHelperAclEventListener;
+use Lift\Mvc\EventListener\RouteAclEventListener;
+use Zend\Authentication\AuthenticationService;
 use Zend\Debug\Debug;
 use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
+use Zend\Permissions\Acl\Acl;
+use Zend\Permissions\Acl\AclInterface as ZendAclInterface;
 use Zend\View\Model\ViewModel;
+
 
 class Module
 {
@@ -19,7 +27,9 @@ class Module
             }
         });
 
-        //$e->getViewModel()->setVariable('is_logged_in', true);
+        $locator = $e->getApplication()->getServiceManager();
+        $locator->get(NavigationHelperAclEventListener::class)->attach($eventManager);
+        $locator->get(RouteAclEventListener::class)->attach($eventManager);
     }
 
     public function getConfig()

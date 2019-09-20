@@ -62,6 +62,7 @@ class TestAdapter implements AdapterInterface
         if($this->userName == 'admin' && $this->password == 'admin'){
             $user = new UserModel();
             $user->setUserName('admin');
+            $user->setRole('user');
             return new Result(Result::SUCCESS, $user);
         }
 

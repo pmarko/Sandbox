@@ -27,6 +27,11 @@ class UserModel
     private $password = '';
 
     /**
+     * @var string
+     */
+    private $role = '';
+
+    /**
      * @return string
      */
     public function getUserName(): string
@@ -96,5 +101,21 @@ class UserModel
     {
         $this->password = $password;
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRole(): string
+    {
+        return $this->role;
+    }
+
+    /**
+     * @param string $role
+     */
+    public function setRole(string $role): void
+    {
+        $this->role = $role;
     }
 }

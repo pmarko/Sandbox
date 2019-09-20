@@ -1,12 +1,12 @@
 <?php
-$this->form->prepare();
+    $this->form->prepare();
 ?>
 
 <button onclick="return add_category()">Add</button>
 
-<?= $this->form($this->form);?>
+<?=$this->form($this->form);?>
 
-<script>
+<?php $this->inlineScript()->captureStart()?>
 
     function add_category() {
         var currentCount = $('form > fieldset > fieldset').length;
@@ -19,12 +19,8 @@ $this->form->prepare();
         return false;
     }
 
-    // function remove(el) {
-    //     $(el).parent().remove();
-    // }
-
     $('.remove-btn').on('click', function(){
         $(this).parent().remove();
     });
 
-</script>
+<?php $this->inlineScript()->captureEnd()?>

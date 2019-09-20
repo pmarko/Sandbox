@@ -2,6 +2,9 @@
 namespace Lift;
 
 use http\Exception\UnexpectedValueException;
+use Lift\Acl\AclInterface;
+use Lift\Acl\ConfigAcl;
+use Lift\Acl\ConfigAclFactory;
 use Lift\Auth\TestAdapter;
 use Lift\Controller\AuthController;
 use Lift\Controller\FoundAtOptionsAdminController;
@@ -13,6 +16,8 @@ use Lift\Form\Fieldset\FoundAtOptionsAdminFieldset;
 use Lift\Form\Fieldset\UserLoginFieldset;
 use Lift\Form\FoundAtOptionsAdminForm;
 use Lift\Form\UserLoginForm;
+use Lift\Mvc\EventListener\NavigationHelperAclEventListener;
+use Lift\Mvc\EventListener\RouteAclEventListener;
 use Lift\Repository\FoundAtOptionsRepo;
 use Lift\Validator\GreaterThan5;
 use Lift\Form\Fieldset\UserFieldset;
@@ -28,7 +33,8 @@ use Zend\Form\Element\Select;
 return [
     'service_manager' => [
         'invokables' => [
-            //TestAdapter::class => TestAdapter::class
+            NavigationHelperAclEventListener::class => NavigationHelperAclEventListener::class,
+            RouteAclEventListener::class => RouteAclEventListener::class
         ],
         'factories' => [
             ZendAuthService::class => function($sm){
@@ -43,7 +49,8 @@ return [
                     throw new \UnexpectedValueException("lift/db_file config required");
                 }
                 return new FoundAtOptionsRepo($config['lift']['db_file']);
-            }
+            },
+            'Lift\Acl\Acl' => ConfigAclFactory::class
         ]
     ],
     'validators' => [
@@ -120,6 +127,7 @@ return [
                     'defaults' => [
                         'controller' => 'Lift\Controller\Index',
                         'action'     => 'index',
+                        'resource'   => 'home'
                     ],
                 ],
                 'may_terminate' => true,
@@ -154,6 +162,7 @@ return [
                             'defaults' => [
                                 'controller' => 'Lift\Controller\User',
                                 'action'     => 'register',
+                                'resource'   => 'register'
                             ],
                         ],
                     ],
@@ -182,10 +191,11 @@ return [
                         'options' => [
                             'route'    => '/:action',
                             'defaults' => [
-                                'controller' => 'Lift\Controller\Auth'
+                                'controller' => 'Lift\Controller\Auth',
+                                'resource' => 'auth'
                             ],
                             'constraints' => [
-                                'action' => '(login|logout)'
+                                'action' => '(login|logout)',
                             ]
                         ],
                     ]
@@ -217,14 +227,19 @@ return [
         ],
     ],
     'navigation' => [
+        'defaults' => [
+
+        ],
         'lift' => [
             [
                 'label' => 'Home',
                 'route' => 'lift',
+                'resource' => 'home'
             ],
             [
                 'label' => 'Register',
                 'route' => 'lift/register',
+                'resource' => 'register'
             ],
         ]
     ],
@@ -237,6 +252,23 @@ return [
         ],
     ],
     'lift'=> [
-        'db_file' => __DIR__ . '/../../../data/config/database.json'
+        'db_file' => __DIR__ . '/../../../data/config/database.json',
+        'acl' => [
+            'roles' => [
+                'guest',
+                'user' => ['guest']
+            ],
+            'resources' => [
+                'home',
+                'register',
+                'auth'
+            ],
+            'allow' => [
+                'guest' => ['home', 'register', 'auth']
+            ],
+            'deny' => [
+                'user' => ['register']
+            ]
+        ]
     ]
 ];

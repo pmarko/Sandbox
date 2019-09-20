@@ -14,33 +14,6 @@ use Zend\Form\FormInterface;
 use Zend\Hydrator\ClassMethods;
 use Zend\Mvc\Controller\AbstractActionController;
 
-//class MyAuthAdapter implements AdapterInterface{
-//
-//    private $user;
-//    private $pass;
-//
-//    public function __construct($user, $pass)
-//    {
-//        $this->user = $user;
-//        $this->pass = $pass;
-//    }
-//
-//    /**
-//     * Performs an authentication attempt
-//     *
-//     * @return \Zend\Authentication\Result
-//     * @throws \Zend\Authentication\Adapter\Exception\ExceptionInterface If authentication cannot be performed
-//     */
-//    public function authenticate()
-//    {
-//        if($this->user == 'admin' && $this->pass == 'pass'){
-//            return new Result(Result::SUCCESS, ['user' => 'admin']);
-//        }
-//
-//        return new Result(Result::FAILURE_CREDENTIAL_INVALID, ['user' => 'guest']);
-//    }
-//}
-
 class AuthController extends AbstractActionController
 {
     /**
@@ -62,11 +35,6 @@ class AuthController extends AbstractActionController
         $this->authService = $authService;
         $this->loginForm = $loginForm;
     }
-
-    public function testAction()
-{
-
-}
 
     public function loginAction()
     {
@@ -100,9 +68,7 @@ class AuthController extends AbstractActionController
         return $this->redirect()->toRoute('lift');
 
         //        $bCrypt = new Bcrypt(['cost' => 10]);
-//        echo $hash = $bCrypt->create('password');
-//        Debug::dump($bCrypt->verify('password', $hash));
-//
-
+        //        echo $hash = $bCrypt->create('password');
+        //        Debug::dump($bCrypt->verify('password', $hash));
     }
 }

@@ -16,9 +16,13 @@ use Lift\Form\Fieldset\FoundAtOptionsAdminFieldset;
 use Lift\Form\Fieldset\UserLoginFieldset;
 use Lift\Form\FoundAtOptionsAdminForm;
 use Lift\Form\UserLoginForm;
+use Lift\Model\UserModel;
+use Lift\Model\UserModelFactory;
 use Lift\Mvc\EventListener\NavigationHelperAclEventListener;
 use Lift\Mvc\EventListener\RouteAclEventListener;
 use Lift\Repository\FoundAtOptionsRepo;
+use Lift\ServiceManager\Delegator\UserModelBDelegatorFactory;
+use Lift\ServiceManager\Delegator\UserModelDelegatorFactory;
 use Lift\Validator\GreaterThan5;
 use Lift\Form\Fieldset\UserFieldset;
 use Lift\Form\Fieldset\UserRegistrationFieldset;
@@ -34,7 +38,7 @@ return [
     'service_manager' => [
         'invokables' => [
             NavigationHelperAclEventListener::class => NavigationHelperAclEventListener::class,
-            RouteAclEventListener::class => RouteAclEventListener::class
+            RouteAclEventListener::class => RouteAclEventListener::class,
         ],
         'factories' => [
             ZendAuthService::class => function($sm){
@@ -50,7 +54,19 @@ return [
                 }
                 return new FoundAtOptionsRepo($config['lift']['db_file']);
             },
-            'Lift\Acl\Acl' => ConfigAclFactory::class
+            'Lift\Acl\Acl' => ConfigAclFactory::class,
+            UserModel::class => function(){
+                $user = new UserModel();
+                $user->setFirstName('peter1');
+                return $user;
+            }
+            //UserModel::class => UserModelFactory::class
+        ],
+        'delegators' => [
+            UserModel::class => [
+                UserModelBDelegatorFactory::class,
+                UserModelDelegatorFactory::class,
+            ]
         ]
     ],
     'validators' => [
@@ -85,7 +101,8 @@ return [
         ],
         'factories' => [
             'Lift\Form\Element\FoundAtSelect' => FoundAtSelectFactory::class
-        ]
+        ],
+        //'shared_by_default' => true
     ],
     'view_helpers' => [
         'invokables' => [

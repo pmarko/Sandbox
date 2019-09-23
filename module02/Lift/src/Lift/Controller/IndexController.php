@@ -4,6 +4,10 @@
 namespace Lift\Controller;
 
 
+use Lift\Form\UserLoginForm;
+use Lift\Model\UserDelegator;
+use Lift\Model\UserModel;
+use Lift\Repository\FoundAtOptionsRepo;
 use phpDocumentor\Reflection\DocBlock\Tags\Generic;
 use Zend\Debug\Debug;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -13,8 +17,25 @@ use Zend\Permissions\Acl\Role\GenericRole;
 
 class IndexController extends AbstractActionController
 {
+    public function doSomethingWithUser(UserModel $user)
+    {
+        echo $user->scream();
+    }
+
     public function indexAction()
     {
+         $locator = @$this->getServiceLocator();
+
+         $user = $locator->get(UserModel::class);
+
+         //$userDelegator = new UserDelegator($user);
+
+         $this->doSomethingWithUser($user);
+
+
+
+
+         //$form1->setData(['user_login' => ['user_name' => 'test']]);
 
 //        $resources = [];
 //        $resources[] = new GenericResource('peter');

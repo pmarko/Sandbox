@@ -118,4 +118,45 @@ class UserModel
     {
         $this->role = $role;
     }
+
+    public function scream()
+    {
+        return $this->getFirstName() . " heeeeeelp!";
+    }
+}
+
+class UserDelegator extends UserModel
+{
+    /**
+     * @var UserModel
+     */
+    private $user;
+
+    public function __construct(UserModel $user)
+    {
+        $this->user = $user;
+    }
+
+    public function scream()
+    {
+        return "delegatedA " . $this->user->scream();
+    }
+}
+
+class UserBDelegator extends UserModel
+{
+    /**
+     * @var UserModel
+     */
+    private $user;
+
+    public function __construct(UserModel $user)
+    {
+        $this->user = $user;
+    }
+
+    public function scream()
+    {
+        return "delegatedB " . $this->user->scream();
+    }
 }

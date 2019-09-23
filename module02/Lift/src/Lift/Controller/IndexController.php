@@ -7,6 +7,7 @@ namespace Lift\Controller;
 use Lift\Form\UserLoginForm;
 use Lift\Model\UserDelegator;
 use Lift\Model\UserModel;
+use Lift\Model\UserRegistrationModel;
 use Lift\Repository\FoundAtOptionsRepo;
 use phpDocumentor\Reflection\DocBlock\Tags\Generic;
 use Zend\Debug\Debug;
@@ -19,7 +20,7 @@ class IndexController extends AbstractActionController
 {
     public function doSomethingWithUser(UserModel $user)
     {
-        echo $user->scream();
+        //echo $user->scream();
     }
 
     public function indexAction()
@@ -27,6 +28,7 @@ class IndexController extends AbstractActionController
          $locator = @$this->getServiceLocator();
 
          $user = $locator->get(UserModel::class);
+         $userReg = $locator->get(UserRegistrationModel::class);
 
          //$userDelegator = new UserDelegator($user);
 

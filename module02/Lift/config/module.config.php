@@ -16,6 +16,7 @@ use Lift\Form\Fieldset\FoundAtOptionsAdminFieldset;
 use Lift\Form\Fieldset\UserLoginFieldset;
 use Lift\Form\FoundAtOptionsAdminForm;
 use Lift\Form\UserLoginForm;
+use Lift\Model\ModelAbstractFactory;
 use Lift\Model\UserModel;
 use Lift\Model\UserModelFactory;
 use Lift\Mvc\EventListener\NavigationHelperAclEventListener;
@@ -23,6 +24,7 @@ use Lift\Mvc\EventListener\RouteAclEventListener;
 use Lift\Repository\FoundAtOptionsRepo;
 use Lift\ServiceManager\Delegator\UserModelBDelegatorFactory;
 use Lift\ServiceManager\Delegator\UserModelDelegatorFactory;
+use Lift\ServiceManager\Initializer\AuthServiceAwareInitializer;
 use Lift\Validator\GreaterThan5;
 use Lift\Form\Fieldset\UserFieldset;
 use Lift\Form\Fieldset\UserRegistrationFieldset;
@@ -55,20 +57,32 @@ return [
                 return new FoundAtOptionsRepo($config['lift']['db_file']);
             },
             'Lift\Acl\Acl' => ConfigAclFactory::class,
-            UserModel::class => function(){
-                $user = new UserModel();
-                $user->setFirstName('peter1');
-                return $user;
-            }
+//            UserModel::class => function(){
+//                $user = new UserModel();
+//                $user->setFirstName('peter1');
+//                return $user;
+//            }
             //UserModel::class => UserModelFactory::class
         ],
-        'delegators' => [
-            UserModel::class => [
-                UserModelBDelegatorFactory::class,
-                UserModelDelegatorFactory::class,
-            ]
+        'initializers' => [
+            AuthServiceAwareInitializer::class
+        ],
+        'abstract_factories' => [
+            ModelAbstractFactory::class
         ]
+//        'delegators' => [
+//            UserModel::class => [
+//                UserModelBDelegatorFactory::class,
+//                UserModelDelegatorFactory::class,
+//            ]
+//        ],
+//        'lazy_services' => [
+//            'class_map' => [
+//                UserModel::class => UserModel::class
+//            ]
+//        ],
     ],
+
     'validators' => [
         'invokables' => [
           GreaterThan5::class => GreaterThan5::class

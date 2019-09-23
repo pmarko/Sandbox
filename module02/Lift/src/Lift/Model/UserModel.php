@@ -4,6 +4,9 @@
 namespace Lift\Model;
 
 
+use Lift\Auth\AuthServiceAwareInterface;
+use Zend\Authentication\AuthenticationService;
+
 class UserModel
 {
     /**

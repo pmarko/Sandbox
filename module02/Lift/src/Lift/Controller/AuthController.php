@@ -67,8 +67,8 @@ class AuthController extends AbstractActionController
 
         return $this->redirect()->toRoute('lift');
 
-        //        $bCrypt = new Bcrypt(['cost' => 10]);
-        //        echo $hash = $bCrypt->create('password');
-        //        Debug::dump($bCrypt->verify('password', $hash));
+//                $bCrypt = new Bcrypt(['cost' => 10]);
+//                echo $hash = $bCrypt->create('password');
+//                Debug::dump($bCrypt->verify('password', $hash));
     }
 }

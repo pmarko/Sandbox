@@ -5,9 +5,12 @@ namespace Lift\Controller;
 
 
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
+use DoctrineModule\Validator\UniqueObject;
 use Lift\Hydrator\Strategy\WhereFoundOptionStrategy;
 use Lift\Repository\UserRegistrationRepository;
 use Lift\Repository\WhereFoundOptionRepository;
+use Lift\Validator\UsernameIsUniqueFactory;
+use Zend\Crypt\Password\Bcrypt;
 use Zend\Debug\Debug;
 use Zend\Form\FormInterface;
 use Zend\Hydrator\NamingStrategy\UnderscoreNamingStrategy;
@@ -39,20 +42,10 @@ class UserRegistrationController extends AbstractActionController
 
     public function registerAction()
     {
-//        $whereFoundRepo = $this->getServiceLocator()->get(WhereFoundOptionRepository::class);
-//
-//        $whereFoundStrtegy = new WhereFoundOptionStrategy($whereFoundRepo);
-//
-//        $this->form->get('user_registration')->getHydrator()->addStrategy('where_found', $whereFoundStrtegy);
 
-        $objectManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-
-        $hydrator = new DoctrineObject($objectManager);
-        $hydrator->setNamingStrategy(new UnderscoreNamingStrategy());
-
-        $this->form->get('user_registration')->setHydrator($hydrator);
-
-        //$this->form->get('user_registration')->get('user')->setHydrator(new DoctrineObject($objectManager));
+        $bCrypt = new Bcrypt(['cost' => 11]);
+        echo $hash = $bCrypt->create('password');
+        Debug::dump($bCrypt->verify('password', $hash));
 
         $viewModel = new ViewModel();
 

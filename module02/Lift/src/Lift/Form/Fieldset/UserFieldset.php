@@ -67,6 +67,18 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
     public function getInputFilterSpecification()
     {
         return [
+            'user_name' => [
+                'validators' => [
+                    [
+                        'name' => 'Lift\Validator\UsernameIsUnique',
+                        'options' => [
+                            'messages' => [
+                                'objectFound' => 'Username \'%value%\' already exists!'
+                            ]
+                        ]
+                    ]
+                ]
+            ]
 //            'user_name' => [
 //
 //                'validators' => [

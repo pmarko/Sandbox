@@ -17,8 +17,6 @@ class UserRegistrationFieldset extends Fieldset implements InputFilterProviderIn
     {
         $this->setObject(new UserRegistrationEntity());
 
-        //$this->setHydrator(new ClassMethods());
-
         $this->add([
             'name' => 'user',
             'type' => 'Lift\Form\Fieldset\UserFieldset',
@@ -43,8 +41,12 @@ class UserRegistrationFieldset extends Fieldset implements InputFilterProviderIn
     public function getInputFilterSpecification()
     {
         return [
-            'found_at' => [
-                'required' => false
+            'where_found' => [
+                'validators' => [
+                    [
+                        'name' => 'Lift\Validator\WhereFoundOptionExists'
+                    ]
+                ]
             ]
         ];
 //        return [

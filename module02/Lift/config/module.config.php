@@ -15,9 +15,12 @@ use Lift\Controller\UserRegistrationControllerFactory;
 use Lift\Filter\UppercaseFirst;
 use Lift\Form\Element\WhereFoundSelectFactory;
 use Lift\Form\Fieldset\FoundAtOptionsAdminFieldset;
+use Lift\Form\Fieldset\UserFieldsetFactory;
 use Lift\Form\Fieldset\UserLoginFieldset;
+use Lift\Form\Fieldset\UserRegistrationFieldsetFactory;
 use Lift\Form\FoundAtOptionsAdminForm;
 use Lift\Form\UserLoginForm;
+use Lift\Hydrator\DoctrineObjectHydratorFactory;
 use Lift\Model\ModelAbstractFactory;
 use Lift\Model\UserModel;
 use Lift\Model\UserModelFactory;
@@ -35,6 +38,8 @@ use Lift\Validator\GreaterThan5;
 use Lift\Form\Fieldset\UserFieldset;
 use Lift\Form\Fieldset\UserRegistrationFieldset;
 use Lift\Form\UserRegistrationForm;
+use Lift\Validator\UsernameIsUniqueFactory;
+use Lift\Validator\WhereFoundOptionExistsFactory;
 use Lift\View\Helper\AuthElement;
 use Lift\View\Helper\AuthElementFactory;
 use Zend\Authentication\AuthenticationService as ZendAuthService;
@@ -95,6 +100,8 @@ return [
           GreaterThan5::class => GreaterThan5::class
         ],
         'factories' => [
+            'Lift\Validator\UsernameIsUnique' => UsernameIsUniqueFactory::class,
+            'Lift\Validator\WhereFoundOptionExists' => WhereFoundOptionExistsFactory::class
         ],
         'aliases' => [
             'GreaterThan5' => GreaterThan5::class
@@ -112,8 +119,6 @@ return [
     ],
     'form_elements' => [
         'invokables' => [
-            'Lift\Form\Fieldset\UserFieldset' => UserFieldset::class,
-            'Lift\Form\Fieldset\UserRegistrationFieldset' => UserRegistrationFieldset::class,
             UserRegistrationForm::class => UserRegistrationForm::class,
             UserLoginFieldset::class => UserLoginFieldset::class,
             UserLoginForm::class => UserLoginForm::class,
@@ -121,7 +126,14 @@ return [
             FoundAtOptionsAdminFieldset::class => FoundAtOptionsAdminFieldset::class
         ],
         'factories' => [
-            'Lift\Form\Element\WhereFoundSelect' => WhereFoundSelectFactory::class
+            'Lift\Form\Element\WhereFoundSelect' => WhereFoundSelectFactory::class,
+            UserFieldset::class => UserFieldsetFactory::class,
+            UserRegistrationFieldset::class => UserRegistrationFieldsetFactory::class
+        ],
+    ],
+    'hydrators' => [
+        'factories' => [
+            'Lift\Hydrator\DoctrineObject' => DoctrineObjectHydratorFactory::class
         ],
     ],
     'view_helpers' => [

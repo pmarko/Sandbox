@@ -4,6 +4,8 @@
 namespace Lift\Controller;
 
 
+use Lift\Repository\UserRegistrationRepository;
+use Lift\Repository\UserRepository;
 use Zend\Debug\Debug;
 use Zend\Form\FormInterface;
 use Zend\Hydrator\ClassMethods;
@@ -15,41 +17,14 @@ use Zend\View\Model\ViewModel;
 
 class UserController extends AbstractActionController
 {
-    /**
-     * @var FormInterface
-     */
-    private $userRegistrationForm;
 
     /**
-     * UserController constructor.
-     * @param FormInterface $userRegistrationForm
+     * @var UserRepository
      */
-    public function __construct(FormInterface $userRegistrationForm)
+    private $repository;
+
+    public function __construct(UserRepository $repository)
     {
-        $this->userRegistrationForm = $userRegistrationForm;
-    }
-
-    public function registerAction()
-    {
-
-        if($this->getRequest()->isPost()){
-
-            $postData = $this->params()->fromPost();
-
-            $this->userRegistrationForm->setData($postData);
-
-            if($this->userRegistrationForm->isValid()){
-
-                $cleanData = $this->userRegistrationForm->getData();
-
-                Debug::dump($cleanData);
-            }
-        }
-
-        $viewModel = new ViewModel();
-
-        $viewModel->setVariable('user_registration_form', $this->userRegistrationForm);
-
-        return $viewModel;
+        $this->repository = $repository;
     }
 }

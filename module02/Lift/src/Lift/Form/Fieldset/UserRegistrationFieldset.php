@@ -4,6 +4,7 @@
 namespace Lift\Form\Fieldset;
 
 
+use Lift\Entity\UserRegistrationEntity;
 use Lift\Model\UserModel;
 use Lift\Model\UserRegistrationModel;
 use Zend\Form\Fieldset;
@@ -14,8 +15,9 @@ class UserRegistrationFieldset extends Fieldset implements InputFilterProviderIn
 {
     public function init()
     {
-        $this->setObject(new UserRegistrationModel());
-        $this->setHydrator(new ClassMethods());
+        $this->setObject(new UserRegistrationEntity());
+
+        //$this->setHydrator(new ClassMethods());
 
         $this->add([
             'name' => 'user',
@@ -24,13 +26,12 @@ class UserRegistrationFieldset extends Fieldset implements InputFilterProviderIn
         ]);
 
         $this->add([
-            'name' => 'found_at',
-            'type' => 'Lift\Form\Element\FoundAtSelect',
+            'name' => 'where_found',
+            'type' => 'Lift\Form\Element\WhereFoundSelect',
             'options' => [
                 'label' => 'How did you found us?',
             ]
         ]);
-
     }
 
     /**
@@ -41,7 +42,11 @@ class UserRegistrationFieldset extends Fieldset implements InputFilterProviderIn
      */
     public function getInputFilterSpecification()
     {
-        return [];
+        return [
+            'found_at' => [
+                'required' => false
+            ]
+        ];
 //        return [
 //            'user_name' => [
 //                'validators' => [

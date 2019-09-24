@@ -6,6 +6,7 @@ namespace Lift\Mvc\EventListener;
 
 use Lift\Auth\AuthServiceAwareInterface;
 use Zend\Authentication\AuthenticationService;
+use Zend\Console\Request as ConsoleRequest;
 use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
 use Zend\Navigation\Page\Mvc;
@@ -21,10 +22,17 @@ class RouteAclEventListener implements AuthServiceAwareInterface
 
     public function onRoute(MvcEvent $e)
     {
-        $locator = $e->getApplication()->getServiceManager();
-        //$authService = $locator->get(AuthenticationService::class);
+        // at the moment no acl for cli
+        if($e->getRequest() instanceof ConsoleRequest) return;
+
         $routeMatch = $e->getRouteMatch();
-        $routeResource = $routeMatch->getParam('resource', '');
+        // only work for lift section and nothing else
+        if(strpos($routeMatch->getMatchedRouteName(), 'lift') !== 0) return;
+
+        $locator = $e->getApplication()->getServiceManager();
+
+        $routeResource = $routeMatch->getParam('resource', 'default');
+
         $acl = $locator->get('Lift\Acl\Acl');
 
         $userRole = $this->authService->hasIdentity() ? $this->authService->getIdentity()->getRole() : $acl->getDefaultRole();

@@ -10,8 +10,10 @@ use Lift\Controller\AuthController;
 use Lift\Controller\FoundAtOptionsAdminController;
 use Lift\Controller\IndexController;
 use Lift\Controller\UserControllerFactory;
+use Lift\Controller\UserRegistrationController;
+use Lift\Controller\UserRegistrationControllerFactory;
 use Lift\Filter\UppercaseFirst;
-use Lift\Form\Element\FoundAtSelectFactory;
+use Lift\Form\Element\WhereFoundSelectFactory;
 use Lift\Form\Fieldset\FoundAtOptionsAdminFieldset;
 use Lift\Form\Fieldset\UserLoginFieldset;
 use Lift\Form\FoundAtOptionsAdminForm;
@@ -22,9 +24,13 @@ use Lift\Model\UserModelFactory;
 use Lift\Mvc\EventListener\NavigationHelperAclEventListener;
 use Lift\Mvc\EventListener\RouteAclEventListener;
 use Lift\Repository\FoundAtOptionsRepo;
+use Lift\Repository\RepositoryAbstractFactory;
+use Lift\Repository\UserRepository;
+use Lift\Repository\UserRepositoryFactory;
 use Lift\ServiceManager\Delegator\UserModelBDelegatorFactory;
 use Lift\ServiceManager\Delegator\UserModelDelegatorFactory;
 use Lift\ServiceManager\Initializer\AuthServiceAwareInitializer;
+use Lift\ServiceManager\Initializer\ObjectManagerAwareInitializer;
 use Lift\Validator\GreaterThan5;
 use Lift\Form\Fieldset\UserFieldset;
 use Lift\Form\Fieldset\UserRegistrationFieldset;
@@ -37,6 +43,22 @@ use Zend\Form\Element\Select;
 
 
 return [
+    'doctrine' => [
+        'driver' => [
+            __NAMESPACE__  .'_driver' => [
+                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                'cache' => 'array',
+                'paths' => [
+                    __DIR__ . '/../src/' . __NAMESPACE__ . '/Entity'
+                ]
+            ],
+            'orm_default' => [
+                'drivers' => [
+                    __NAMESPACE__ . '\Entity' => __NAMESPACE__  .'_driver'
+                ]
+            ]
+        ],
+    ],
     'service_manager' => [
         'invokables' => [
             NavigationHelperAclEventListener::class => NavigationHelperAclEventListener::class,
@@ -46,29 +68,14 @@ return [
             ZendAuthService::class => function($sm){
                 return new ZendAuthService(null, new TestAdapter());
             },
-            FoundAtOptionsRepo::class => function($sm){
-                $config = $sm->get('Config');
-                if(!array_key_exists('lift', $config)){
-                    throw new \UnexpectedValueException("lift config required");
-                }
-                if(!array_key_exists('db_file', $config['lift'])){
-                    throw new \UnexpectedValueException("lift/db_file config required");
-                }
-                return new FoundAtOptionsRepo($config['lift']['db_file']);
-            },
             'Lift\Acl\Acl' => ConfigAclFactory::class,
-//            UserModel::class => function(){
-//                $user = new UserModel();
-//                $user->setFirstName('peter1');
-//                return $user;
-//            }
-            //UserModel::class => UserModelFactory::class
         ],
         'initializers' => [
-            AuthServiceAwareInitializer::class
+            AuthServiceAwareInitializer::class,
+            ObjectManagerAwareInitializer::class
         ],
         'abstract_factories' => [
-            ModelAbstractFactory::class
+            RepositoryAbstractFactory::class
         ]
 //        'delegators' => [
 //            UserModel::class => [
@@ -107,16 +114,15 @@ return [
         'invokables' => [
             'Lift\Form\Fieldset\UserFieldset' => UserFieldset::class,
             'Lift\Form\Fieldset\UserRegistrationFieldset' => UserRegistrationFieldset::class,
-            'Lift\Form\UserRegistrationForm' => UserRegistrationForm::class,
+            UserRegistrationForm::class => UserRegistrationForm::class,
             UserLoginFieldset::class => UserLoginFieldset::class,
             UserLoginForm::class => UserLoginForm::class,
             FoundAtOptionsAdminForm::class => FoundAtOptionsAdminForm::class,
             FoundAtOptionsAdminFieldset::class => FoundAtOptionsAdminFieldset::class
         ],
         'factories' => [
-            'Lift\Form\Element\FoundAtSelect' => FoundAtSelectFactory::class
+            'Lift\Form\Element\WhereFoundSelect' => WhereFoundSelectFactory::class
         ],
-        //'shared_by_default' => true
     ],
     'view_helpers' => [
         'invokables' => [
@@ -146,7 +152,8 @@ return [
                 $form = $sm->getServiceLocator()->get('FormElementManager')
                     ->get(FoundAtOptionsAdminForm::class);
                 return new FoundAtOptionsAdminController($repo, $form);
-            }
+            },
+            'Lift\Controller\UserRegistration' => UserRegistrationControllerFactory::class
         ]
     ],
     'router' => [
@@ -191,7 +198,7 @@ return [
                         'options' => [
                             'route'    => '/register',
                             'defaults' => [
-                                'controller' => 'Lift\Controller\User',
+                                'controller' => 'Lift\Controller\UserRegistration',
                                 'action'     => 'register',
                                 'resource'   => 'register'
                             ],

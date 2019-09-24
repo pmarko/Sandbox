@@ -4,6 +4,7 @@
 namespace Lift\Form\Fieldset;
 
 
+use Lift\Entity\UserEntity;
 use Lift\Model\UserModel;
 use Zend\Form\Fieldset;
 use Zend\Hydrator\ClassMethods;
@@ -13,7 +14,7 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
 {
     public function init()
     {
-        $this->setObject(new UserModel());
+        $this->setObject(new UserEntity());
         $this->setHydrator(new ClassMethods());
 
         $this->add([
@@ -66,29 +67,29 @@ class UserFieldset extends Fieldset implements InputFilterProviderInterface
     public function getInputFilterSpecification()
     {
         return [
-            'user_name' => [
-
-                'validators' => [
-                    [
-                        'name' => 'StringLength',
-                        //'break_chain_on_failure' => true,
-                        'options' => [
-                            'min' => 5
-                        ],
-                    ],
+//            'user_name' => [
+//
+//                'validators' => [
 //                    [
-////                        'name' => 'Int',
-////                        'options' => [
-////                            'max' => 100
-////                        ]
+//                        'name' => 'StringLength',
+//                        //'break_chain_on_failure' => true,
+//                        'options' => [
+//                            'min' => 5
+//                        ],
+//                    ],
+////                    [
+//////                        'name' => 'Int',
+//////                        'options' => [
+//////                            'max' => 100
+//////                        ]
+////                    ]
+//                ],
+//                'filters' => [
+//                    [
+//                        'name' => 'UppercaseFirst'
 //                    ]
-                ],
-                'filters' => [
-                    [
-                        'name' => 'UppercaseFirst'
-                    ]
-                ]
-            ]
+//                ]
+//            ]
         ];
     }
 }

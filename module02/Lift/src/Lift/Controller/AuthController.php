@@ -12,6 +12,7 @@ use Zend\Crypt\Password\Bcrypt;
 use Zend\Debug\Debug;
 use Zend\Form\FormInterface;
 use Zend\Hydrator\ClassMethods;
+use Zend\Hydrator\NamingStrategy\MapNamingStrategy;
 use Zend\Mvc\Controller\AbstractActionController;
 
 class AuthController extends AbstractActionController
@@ -38,6 +39,14 @@ class AuthController extends AbstractActionController
 
     public function loginAction()
     {
+        //TODO: move this to better location
+        $this->loginForm->get('user_login')
+        ->getHydrator()
+        ->setNamingStrategy(new MapNamingStrategy([
+            'user_name' => 'identity',
+            'password' => 'credential'
+        ]));
+
         if(!$this->getRequest()->isPost()){
             return $this->notFoundAction();
         }
@@ -54,6 +63,8 @@ class AuthController extends AbstractActionController
 
         $result = $this->authService->authenticate();
 
+        //TODO: FLASH-MESSENGER!!!!!!!!
+
         if($result->isValid()){
           return $this->redirect()->toRoute('lift');
         }else{
@@ -66,9 +77,5 @@ class AuthController extends AbstractActionController
         $this->authService->clearIdentity();
 
         return $this->redirect()->toRoute('lift');
-
-//                $bCrypt = new Bcrypt(['cost' => 10]);
-//                echo $hash = $bCrypt->create('password');
-//                Debug::dump($bCrypt->verify('password', $hash));
     }
 }

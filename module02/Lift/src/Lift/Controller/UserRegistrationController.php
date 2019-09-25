@@ -42,11 +42,6 @@ class UserRegistrationController extends AbstractActionController
 
     public function registerAction()
     {
-
-        $bCrypt = new Bcrypt(['cost' => 11]);
-        echo $hash = $bCrypt->create('password');
-        Debug::dump($bCrypt->verify('password', $hash));
-
         $viewModel = new ViewModel();
 
         if($this->getRequest()->isPost()){

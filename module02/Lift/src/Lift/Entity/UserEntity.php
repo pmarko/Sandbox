@@ -3,12 +3,14 @@
 namespace Lift\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Lift\Crypto\CryptoAwareInterface;
+use Zend\Crypt\Password\PasswordInterface;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="user")
  */
-class UserEntity
+class UserEntity implements CryptoAwareInterface
 {
     /**
      * @ORM\Id
@@ -47,6 +49,11 @@ class UserEntity
      * @ORM\Column(name="role", type="string", nullable=false, length=255, unique=false)
      */
     private $role = 'user';
+
+    /**
+     * @var PasswordInterface
+     */
+    private $crypto;
 
     /**
      * @return string
@@ -116,8 +123,40 @@ class UserEntity
      */
     public function setPassword(string $password): self
     {
-        $this->password = $password;
+        $this->password = $this->getCrypto()->create($password);
         return $this;
+    }
+
+    /**
+     * @param string $password
+     * @return mixed
+     */
+    public function verify(string $password)
+    {
+        return $this->getCrypto()->verify($password, $this->password);
+    }
+
+    /**
+     * @param PasswordInterface $crypto
+     * @return $this
+     */
+    public function setCrypto(PasswordInterface $crypto)
+    {
+        $this->crypto = $crypto;
+        return $this;
+    }
+
+    /**
+     * @return PasswordInterface
+     * @throws \Exception
+     */
+    public function getCrypto()
+    {
+        if(!$this->crypto){
+            throw new \Exception("No cryptography found");
+        }
+
+        return $this->crypto;
     }
 
     /**

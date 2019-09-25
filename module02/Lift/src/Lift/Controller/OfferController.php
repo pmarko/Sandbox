@@ -4,7 +4,12 @@
 namespace Lift\Controller;
 
 
-class OfferController
-{
+use Zend\Mvc\Controller\AbstractActionController;
 
+class OfferController extends AbstractActionController
+{
+    public function indexAction()
+    {
+        return [];
+    }
 }

@@ -13,6 +13,9 @@ $userFs = $userRegistrationFs->get('user');
                 </label>
                 <div class="col-sm-10">
                     <?=$this->formText($userFs->get('user_name')->setAttribute('class', 'form-control'))?>
+                    <span class="help-block">
+                        Username must be between 3 and 20 characters long.
+                    </span>
                     <?=$this->formElementErrors($userFs->get('user_name'))?>
                 </div>
             </div>
@@ -22,6 +25,9 @@ $userFs = $userRegistrationFs->get('user');
                 </label>
                 <div class="col-sm-10">
                     <?=$this->formText($userFs->get('first_name')->setAttribute('class', 'form-control'))?>
+                    <span class="help-block">
+                        First name be between 2 and 20 characters long.
+                    </span>
                     <?=$this->formElementErrors($userFs->get('first_name'))?>
                 </div>
             </div>
@@ -29,6 +35,9 @@ $userFs = $userRegistrationFs->get('user');
                 <label class="col-sm-2 control-label"><?=$this->formLabel($userFs->get('last_name'))?></label>
                 <div class="col-sm-10">
                     <?=$this->formText($userFs->get('last_name')->setAttribute('class', 'form-control'))?>
+                    <span class="help-block">
+                        Last name be between 2 and 20 characters long.
+                    </span>
                     <?=$this->formElementErrors($userFs->get('last_name'))?>
                 </div>
             </div>
@@ -36,6 +45,9 @@ $userFs = $userRegistrationFs->get('user');
                 <label class="col-sm-2 control-label"><?=$this->formLabel($userFs->get('password'))?></label>
                 <div class="col-sm-10">
                     <?=$this->formPassword($userFs->get('password')->setAttribute('class', 'form-control'))?>
+                    <span class="help-block">
+                        Password must be minimum 8 characters long.
+                    </span>
                     <?=$this->formElementErrors($userFs->get('password'))?>
                 </div>
             </div>

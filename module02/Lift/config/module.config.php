@@ -5,13 +5,20 @@ use http\Exception\UnexpectedValueException;
 use Lift\Acl\AclInterface;
 use Lift\Acl\ConfigAcl;
 use Lift\Acl\ConfigAclFactory;
+use Lift\Auth\DoctrineAuthServiceFactory;
 use Lift\Auth\TestAdapter;
 use Lift\Controller\AuthController;
+use Lift\Controller\DemandController;
 use Lift\Controller\FoundAtOptionsAdminController;
 use Lift\Controller\IndexController;
+use Lift\Controller\OfferController;
 use Lift\Controller\UserControllerFactory;
 use Lift\Controller\UserRegistrationController;
 use Lift\Controller\UserRegistrationControllerFactory;
+use Lift\Crypto\BcryptFactory;
+use Lift\Doctrine\EventListener\CryptoInjectionListener;
+use Lift\Doctrine\EventListener\CryptoInjectionListenerFactory;
+use Lift\Entity\UserEntity;
 use Lift\Filter\UppercaseFirst;
 use Lift\Form\Element\WhereFoundSelectFactory;
 use Lift\Form\Fieldset\FoundAtOptionsAdminFieldset;
@@ -43,6 +50,7 @@ use Lift\Validator\WhereFoundOptionExistsFactory;
 use Lift\View\Helper\AuthElement;
 use Lift\View\Helper\AuthElementFactory;
 use Zend\Authentication\AuthenticationService as ZendAuthService;
+use Zend\Crypt\Password\Bcrypt;
 use Zend\Filter\Callback;
 use Zend\Form\Element\Select;
 
@@ -63,6 +71,25 @@ return [
                 ]
             ]
         ],
+        'authentication' => [
+            'orm_default' => [
+                'object_manager' => 'Doctrine\ORM\EntityManager',
+                'identity_class' => 'Lift\Entity\UserEntity',
+                'identity_property' => 'userName',
+                'credential_property' => 'password',
+                'credential_callable' => function (UserEntity $user, $passwordGiven) {
+                    return $user->verify($passwordGiven);
+                },
+            ],
+        ],
+        'eventmanager' => [
+            'orm_default' => [
+                'subscribers' => [
+                    CryptoInjectionListener::class
+                ],
+            ],
+        ],
+
     ],
     'service_manager' => [
         'invokables' => [
@@ -70,9 +97,9 @@ return [
             RouteAclEventListener::class => RouteAclEventListener::class,
         ],
         'factories' => [
-            ZendAuthService::class => function($sm){
-                return new ZendAuthService(null, new TestAdapter());
-            },
+            ZendAuthService::class => DoctrineAuthServiceFactory::class,
+            CryptoInjectionListener::class => CryptoInjectionListenerFactory::class,
+            'Lift\Crypto\Crypto' => BcryptFactory::class,
             'Lift\Acl\Acl' => ConfigAclFactory::class,
         ],
         'initializers' => [
@@ -150,7 +177,8 @@ return [
     'controllers' => [
         'invokables' => [
             'Lift\Controller\Index' => IndexController::class,
-            //'Lift\Controller\FoundAtOptionsAdmin'  => FoundAtOptionsAdminController::class
+            'Lift\Controller\Offer' => OfferController::class,
+            'Lift\Controller\Demand' => DemandController::class
         ],
         'factories' => [
             'Lift\Controller\User' => UserControllerFactory::class,
@@ -213,6 +241,50 @@ return [
                                 'controller' => 'Lift\Controller\UserRegistration',
                                 'action'     => 'register',
                                 'resource'   => 'register'
+                            ],
+                        ],
+                    ],
+                    'offer' => [
+                        'type' => 'Zend\Mvc\Router\Http\Literal',
+                        'options' => [
+                            'route'    => '/offer',
+                            'defaults' => [
+                                'controller' => 'Lift\Controller\Offer',
+                                'action'     => 'index',
+                                'resource'   => 'offer'
+                            ],
+                        ],
+                    ],
+                    'demand' => [
+                        'type' => 'Zend\Mvc\Router\Http\Literal',
+                        'options' => [
+                            'route'    => '/request',
+                            'defaults' => [
+                                'controller' => 'Lift\Controller\Demand',
+                                'action'     => 'index',
+                                'resource'   => 'demand'
+                            ],
+                        ],
+                    ],
+                    'my_offer' => [
+                        'type' => 'Zend\Mvc\Router\Http\Literal',
+                        'options' => [
+                            'route'    => '/my-offer',
+                            'defaults' => [
+                                'controller' => 'Lift\Controller\Offer',
+                                'action'     => 'index',
+                                'resource'   => 'my_offer'
+                            ],
+                        ],
+                    ],
+                    'my_demand' => [
+                        'type' => 'Zend\Mvc\Router\Http\Literal',
+                        'options' => [
+                            'route'    => '/my-request',
+                            'defaults' => [
+                                'controller' => 'Lift\Controller\Demand',
+                                'action'     => 'index',
+                                'resource'   => 'my_demand'
                             ],
                         ],
                     ],
@@ -287,6 +359,26 @@ return [
                 'resource' => 'home'
             ],
             [
+                'label' => 'Offers',
+                'route' => 'lift/offer',
+                'resource' => 'offer'
+            ],
+            [
+                'label' => 'Requests',
+                'route' => 'lift/demand',
+                'resource' => 'demand'
+            ],
+            [
+                'label' => 'My Offers',
+                'route' => 'lift/my_offer',
+                'resource' => 'my_offer'
+            ],
+            [
+                'label' => 'My Requests',
+                'route' => 'lift/my_demand',
+                'resource' => 'my_demand'
+            ],
+            [
                 'label' => 'Register',
                 'route' => 'lift/register',
                 'resource' => 'register'
@@ -311,10 +403,15 @@ return [
             'resources' => [
                 'home',
                 'register',
-                'auth'
+                'auth',
+                'offer',
+                'demand',
+                'my_offer',
+                'my_demand'
             ],
             'allow' => [
-                'guest' => ['home', 'register', 'auth']
+                'guest' => ['home', 'register', 'auth', 'offer', 'demand'],
+                'user' => ['my_offer', 'my_demand']
             ],
             'deny' => [
                 'user' => ['register']

@@ -4,7 +4,12 @@
 namespace Lift\Controller;
 
 
-class DemandController
-{
+use Zend\Mvc\Controller\AbstractActionController;
 
+class DemandController extends AbstractActionController
+{
+    public function indexAction()
+    {
+        return [];
+    }
 }

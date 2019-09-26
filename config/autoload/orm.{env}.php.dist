@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'doctrine' => [
+        'connection' => [
+            // Configuration for service `doctrine.connection.orm_default` service
+            'orm_default' => [
+                // configuration instance to use. The retrieved service name will
+                // be `doctrine.configuration.$thisSetting`
+                'configuration' => 'orm_default',
+                // event manager instance to use. The retrieved service name will
+                // be `doctrine.eventmanager.$thisSetting`
+                'eventmanager'  => 'orm_default',
+                // connection parameters, see
+                // http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html
+                'driverClass' => 'Doctrine\DBAL\Driver\PDOMySql\Driver',
+                'params' => [
+                    'host'     => '{SERVER}',
+                    'port'     => '3306',
+                    'user'     => '{USER}',
+                    'password' => '{PASS}',
+                    'dbname'   => '{DB_NAME}',
+                ]
+            ],
+        ],
+    ],
+];

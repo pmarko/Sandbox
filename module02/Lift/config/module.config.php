@@ -425,7 +425,13 @@ return [
             [
                 'label' => 'My Offers',
                 'route' => 'lift/my_offer',
-                'resource' => 'my_offer'
+                'resource' => 'my_offer',
+                'pages' => [
+                    [
+                        'label' => 'Create',
+                        'route' => 'lift/my_offer/create'
+                    ]
+                ]
             ],
             [
                 'label' => 'My Requests',

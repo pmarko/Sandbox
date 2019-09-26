@@ -1,0 +1,21 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th><?=$this->translate('FROM')?></th>
+        <th><?=$this->translate('TO')?></th>
+        <th><?=$this->translate('WHO')?></th>
+        <th><?=$this->translate('UPDATED')?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($this->items as $item):?>
+        <tr>
+            <td><?=$this->escapeHtml($item['fromLocation'])?></td>
+            <td><?=$this->escapeHtml($item['toLocation'])?></td>
+            <td><?=$this->escapeHtml($item['creator']['userName'])?></td>
+            <td><?=$this->dateFormat($item['updatedAt'], IntlDateFormatter::MEDIUM, IntlDateFormatter::MEDIUM)?></td>
+        </tr>
+    <?php endforeach;?>
+    </tbody>
+</table>
+

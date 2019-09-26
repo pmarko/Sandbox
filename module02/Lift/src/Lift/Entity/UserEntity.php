@@ -174,4 +174,12 @@ class UserEntity implements CryptoAwareInterface
     {
         $this->role = $role;
     }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
 }

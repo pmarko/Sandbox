@@ -1,0 +1,21 @@
+<div class="row">
+    <div class="col-md-3">
+        <?=$this->paginationControl($this->items, 'sliding',
+            'partials/pagination/numeric', ['route' => 'lift/offer'])?>
+    </div>
+    <div class="col-md-9">
+        Page size:
+        <select class="page-select">
+            <?php foreach ([10,20,50] as $val):?>
+                <?php $selected = $this->selected_size == $val ? 'selected' : '';?>
+                <option value="<?=$this->liftUrl('lift/offer', [], ['query' => ['size' => $val]], true)?>" <?=$selected?>><?=$val?></option>
+            <?php endforeach;?>
+        </select>
+    </div>
+</div>
+
+<?php $this->inlineScript()->captureStart()?>
+    $('.page-select').on('change', function(){
+        window.location = $(this).val();
+    });
+<?php $this->inlineScript()->captureEnd()?>

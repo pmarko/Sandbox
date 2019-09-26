@@ -64,10 +64,10 @@ class UserEntity extends \Lift\Entity\UserEntity implements \Doctrine\ORM\Proxy\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'id', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'userName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'firstName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'lastName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'password', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'role'];
+            return ['__isInitialized__', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'id', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'userName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'firstName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'lastName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'password', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'role', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'crypto'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'id', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'userName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'firstName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'lastName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'password', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'role'];
+        return ['__isInitialized__', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'id', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'userName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'firstName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'lastName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'password', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'role', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'crypto'];
     }
 
     /**
@@ -264,6 +264,39 @@ class UserEntity extends \Lift\Entity\UserEntity implements \Doctrine\ORM\Proxy\
     /**
      * {@inheritDoc}
      */
+    public function verify(string $password)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'verify', [$password]);
+
+        return parent::verify($password);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCrypto(\Zend\Crypt\Password\PasswordInterface $crypto)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCrypto', [$crypto]);
+
+        return parent::setCrypto($crypto);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCrypto()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCrypto', []);
+
+        return parent::getCrypto();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getRole(): string
     {
 
@@ -281,6 +314,21 @@ class UserEntity extends \Lift\Entity\UserEntity implements \Doctrine\ORM\Proxy\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setRole', [$role]);
 
         parent::setRole($role);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getId(): int
+    {
+        if ($this->__isInitialized__ === false) {
+            return (int)  parent::getId();
+        }
+
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
+
+        return parent::getId();
     }
 
 }

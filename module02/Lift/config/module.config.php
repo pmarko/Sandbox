@@ -9,9 +9,12 @@ use Lift\Auth\DoctrineAuthServiceFactory;
 use Lift\Auth\TestAdapter;
 use Lift\Controller\AuthController;
 use Lift\Controller\DemandController;
+use Lift\Controller\DemandControllerFactory;
 use Lift\Controller\FoundAtOptionsAdminController;
 use Lift\Controller\IndexController;
+use Lift\Controller\MyOfferControllerFactory;
 use Lift\Controller\OfferController;
+use Lift\Controller\OfferControllerFactory;
 use Lift\Controller\UserControllerFactory;
 use Lift\Controller\UserRegistrationController;
 use Lift\Controller\UserRegistrationControllerFactory;
@@ -22,10 +25,12 @@ use Lift\Entity\UserEntity;
 use Lift\Filter\UppercaseFirst;
 use Lift\Form\Element\WhereFoundSelectFactory;
 use Lift\Form\Fieldset\FoundAtOptionsAdminFieldset;
+use Lift\Form\Fieldset\OfferFieldset;
 use Lift\Form\Fieldset\UserFieldsetFactory;
 use Lift\Form\Fieldset\UserLoginFieldset;
 use Lift\Form\Fieldset\UserRegistrationFieldsetFactory;
 use Lift\Form\FoundAtOptionsAdminForm;
+use Lift\Form\MyOfferForm;
 use Lift\Form\UserLoginForm;
 use Lift\Hydrator\DoctrineObjectHydratorFactory;
 use Lift\Model\ModelAbstractFactory;
@@ -49,6 +54,7 @@ use Lift\Validator\UsernameIsUniqueFactory;
 use Lift\Validator\WhereFoundOptionExistsFactory;
 use Lift\View\Helper\AuthElement;
 use Lift\View\Helper\AuthElementFactory;
+use Lift\View\Helper\UrlWithQueryParams;
 use Zend\Authentication\AuthenticationService as ZendAuthService;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\Filter\Callback;
@@ -150,7 +156,9 @@ return [
             UserLoginFieldset::class => UserLoginFieldset::class,
             UserLoginForm::class => UserLoginForm::class,
             FoundAtOptionsAdminForm::class => FoundAtOptionsAdminForm::class,
-            FoundAtOptionsAdminFieldset::class => FoundAtOptionsAdminFieldset::class
+            FoundAtOptionsAdminFieldset::class => FoundAtOptionsAdminFieldset::class,
+            OfferFieldset::class => OfferFieldset::class,
+            MyOfferForm::class => MyOfferForm::class
         ],
         'factories' => [
             'Lift\Form\Element\WhereFoundSelect' => WhereFoundSelectFactory::class,
@@ -165,20 +173,24 @@ return [
     ],
     'view_helpers' => [
         'invokables' => [
-
+            //UrlWithQueryParams::class => UrlWithQueryParams::class,
         ],
         'factories' => [
-            AuthElement::class => AuthElementFactory::class
+            AuthElement::class => AuthElementFactory::class,
+            UrlWithQueryParams::class => function($sm){
+                $request = $sm->getServiceLocator()->get('Request');
+                return new UrlWithQueryParams($request);
+            }
         ],
         'aliases' => [
-            'liftAuthElement' => AuthElement::class
+            'liftAuthElement' => AuthElement::class,
+            'liftUrl' => UrlWithQueryParams::class
         ]
     ],
     'controllers' => [
         'invokables' => [
             'Lift\Controller\Index' => IndexController::class,
-            'Lift\Controller\Offer' => OfferController::class,
-            'Lift\Controller\Demand' => DemandController::class
+
         ],
         'factories' => [
             'Lift\Controller\User' => UserControllerFactory::class,
@@ -193,7 +205,10 @@ return [
                     ->get(FoundAtOptionsAdminForm::class);
                 return new FoundAtOptionsAdminController($repo, $form);
             },
-            'Lift\Controller\UserRegistration' => UserRegistrationControllerFactory::class
+            'Lift\Controller\UserRegistration' => UserRegistrationControllerFactory::class,
+            'Lift\Controller\Offer' => OfferControllerFactory::class,
+            'Lift\Controller\Demand' => DemandControllerFactory::class,
+            'Lift\Controller\MyOffer' => MyOfferControllerFactory::class,
         ]
     ],
     'router' => [
@@ -256,13 +271,15 @@ return [
                         ],
                     ],
                     'demand' => [
-                        'type' => 'Zend\Mvc\Router\Http\Literal',
+                        'type' => 'Zend\Mvc\Router\Http\Segment',
                         'options' => [
-                            'route'    => '/request',
+                            'route'    => '/request[/page/:page][/size/:size]',
                             'defaults' => [
                                 'controller' => 'Lift\Controller\Demand',
                                 'action'     => 'index',
-                                'resource'   => 'demand'
+                                'resource'   => 'demand',
+                                'page'       => 1,
+                                'size'       => 10
                             ],
                         ],
                     ],
@@ -271,11 +288,48 @@ return [
                         'options' => [
                             'route'    => '/my-offer',
                             'defaults' => [
-                                'controller' => 'Lift\Controller\Offer',
+                                'controller' => 'Lift\Controller\MyOffer',
                                 'action'     => 'index',
                                 'resource'   => 'my_offer'
                             ],
                         ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'create' => [
+                                'type' => 'Zend\Mvc\Router\Http\Literal',
+                                'options' => [
+                                    'route'    => '/new',
+                                    'defaults' => [
+                                        'controller' => 'Lift\Controller\MyOffer',
+                                        'action'     => 'create',
+                                        'resource'   => 'my_offer'
+                                    ],
+                                ],
+                            ],
+                            'update' => [
+                                'type' => 'Zend\Mvc\Router\Http\Segment',
+                                'options' => [
+                                    'route'    => '/edit/:id',
+                                    'defaults' => [
+                                        'controller' => 'Lift\Controller\MyOffer',
+                                        'action'     => 'update',
+                                        'resource'   => 'my_offer'
+                                    ],
+                                ],
+                            ],
+                            'delete' => [
+                                'type' => 'Zend\Mvc\Router\Http\Segment',
+                                'options' => [
+                                    'route'    => '/remove/:id',
+                                    'defaults' => [
+                                        'controller' => 'Lift\Controller\MyOffer',
+                                        'action'     => 'delete',
+                                        'resource'   => 'my_offer'
+                                    ],
+                                ],
+                            ]
+
+                        ]
                     ],
                     'my_demand' => [
                         'type' => 'Zend\Mvc\Router\Http\Literal',
@@ -392,6 +446,9 @@ return [
         'template_map' => [
             'layout/lift' => __DIR__ . '/../view/layout/layout.phtml',
         ],
+        'strategies' => [
+            'ViewJsonStrategy',
+        ]
     ],
     'lift'=> [
         'db_file' => __DIR__ . '/../../../data/config/database.json',

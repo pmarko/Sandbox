@@ -7,13 +7,21 @@
  */
 return array(
     'modules' => array(
+        'DoctrineModule',
+        'DoctrineORMModule',
         'Application',
-        'Client01',
+        'Lift',
+        //'Client',
+        //'Client01',
+        //'Client02',
+        'ZendDeveloperTools',
+        'Zend\Navigation'
     ),
     'module_listener_options' => array(
         'module_paths' => array(
             './module',
-            './module01',
+            //'./module01', // damian client on dispatch demo
+            './module02',   // lift, the training application
             './vendor',
         ),
         'config_glob_paths' => array(

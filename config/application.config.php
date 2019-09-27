@@ -11,17 +11,14 @@ return array(
         'DoctrineORMModule',
         'Application',
         'Lift',
-        //'Client',
-        //'Client01',
-        //'Client02',
         'ZendDeveloperTools',
-        'Zend\Navigation'
+        'Zend\\Navigation',
+        'GmM2M',
     ),
     'module_listener_options' => array(
         'module_paths' => array(
             './module',
-            //'./module01', // damian client on dispatch demo
-            './module02',   // lift, the training application
+            './module02',
             './vendor',
         ),
         'config_glob_paths' => array(

@@ -13,17 +13,41 @@ class HttpClientController extends AbstractActionController
 {
     public function indexAction()
     {
-        $client = new Client();
+//        $client = new Client();
+//
+//        $request = new Request();
+//
+//        $request->setUri('https://gmb2cob.gm.com/downloadtuples/v1/');
+//
+//        $response = $client->send($request);
 
-        $request = new Request();
 
-        $request->setUri('');
+        $vars = ['a' => 'b'];
+        $opts = [
+            'name' => 'peter'
+        ];
 
-        $response = $client->send($request);
-
-        // Debug::dump($response->getHeaders());
+        $queue = new \ZendJobQueue();
+        $jobID = $queue->createHttpJob("http://localhost/sandbox/public/gmm2m/execute", $vars, $opts);
+        echo $jobID;
 
         return $this->getResponse();
+    }
+
+    public function executeAction()
+    {
+        // create executions record in db
+
+        // some code here
+
+        // ok
+        // update success
+
+        // error
+        // update error + message
+
+
+        return $this->getResponse()->setContent('Hello');
     }
 }
 

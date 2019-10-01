@@ -403,7 +403,7 @@ return [
         ],
     ],
     'navigation' => [
-        'defaults' => [
+        'default' => [
 
         ],
         'lift' => [
@@ -430,6 +430,10 @@ return [
                     [
                         'label' => 'Create',
                         'route' => 'lift/my_offer/create'
+                    ],
+                    [
+                        'label' => 'Edit',
+                        'route' => 'lift/my_offer/update'
                     ]
                 ]
             ],

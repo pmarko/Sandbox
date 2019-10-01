@@ -49,6 +49,54 @@ class HttpClientController extends AbstractActionController
 
         return $this->getResponse()->setContent('Hello');
     }
+
+    // server/gmm2m/download/check-levels
+    public function orderDownloadAction()
+    {
+        $configs = [1,2,3,4,5];
+
+        $limit = 3;
+
+        foreach ($configs as $config){
+            if($config < $limit){
+
+                echo "create download order in db";
+
+                echo "creating b with order id"
+
+                $queue = new \ZendJobQueue();
+                $job = $queue->createHttpJob('server/gmm2m/download/execute/1234}', [],[])
+            }
+        }
+
+        // find all configs
+        // for each
+        // check the level
+        // if level low
+        // download
+        // if download fails wait 10 minutes
+        // download
+    }
+
+    // server/gmm2m/download/execute
+    public function downloadAction()
+    {
+        $orderID = $this->params()->fromQuery('order');
+
+
+        echo "READING ORDER FROM DB";
+        echo "CREATING RECORD IN DB";
+        // check if order has gmrequestid
+        // if not
+        // get getrequestgmid
+        // save it to the order
+        // else
+        // just dowload the file with gmrequestid
+        echo "DOWNLOADING FILE";
+        echo "UPDATTING REC IN DB WITH STATUS";
+    }
+
+
 }
 
 class Gmb2CobClient

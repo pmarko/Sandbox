@@ -50,4 +50,9 @@ class UserRepository implements ObjectManagerAwareInterface
     {
         $this->objectManager = $objectManager;
     }
+
+    public function findById($id)
+    {
+        return $this->objectManager->getRepository(UserEntity::class)->find($id);
+    }
 }

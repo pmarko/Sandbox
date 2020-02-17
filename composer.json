@@ -11,10 +11,21 @@
         "php": ">=5.5",
         "zendframework/zendframework": "~2.5",
         "zendframework/zftool": "dev-master",
-        "zfcampus/zf-development-mode": "^3.2",
-        "doctrine/doctrine-orm-module": "1.1"
+        "doctrine/doctrine-orm-module": "^1.1",
+        "zfcampus/zf-apigility": "~1.0",
+        "zfcampus/zf-apigility-doctrine": "^2.3",
+        "api-skeletons/zf-oauth2-client": "1.0",
+        "api-skeletons/zf-oauth2-doctrine": "*",
+        "api-skeletons/zf-oauth2-doctrine-console": "*",
+        "zfcampus/zf-apigility-documentation": "^1.3",
+        "zfcampus/zf-apigility-documentation-apiblueprint": "^1.3",
+        "zfcampus/zf-apigility-documentation-swagger": "^1.3",
+        "zfcampus/zf-content-negotiation": "^1.4"
     },
     "require-dev": {
-        "zendframework/zend-developer-tools": "^1.2"
+        "zendframework/zend-developer-tools": "^1.2",
+        "zfcampus/zf-apigility-admin": "~1.0",
+        "zfcampus/zf-development-mode": "^3.2",
+        "zfcampus/zf-asset-manager": "^1.2"
     }
 }

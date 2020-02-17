@@ -20,8 +20,9 @@ class NavigationHelperAclEventListener
         $navigationViewHelper = $locator->get('ViewHelperManager')->get('navigation');
         $acl = $locator->get('Lift\Acl\Acl');
         $authService = $locator->get(AuthenticationService::class);
-        $userRole = $authService->hasIdentity() ?
-            $authService->getIdentity()->getRole() : $acl->getDefaultRole();
+//        $userRole = $authService->hasIdentity() ?
+//            $authService->getIdentity()->getRole() : $acl->getDefaultRole();
+        $userRole = $acl->getDefaultRole();
         $navigationViewHelper->setAcl($acl)->setRole($userRole);
     }
 }

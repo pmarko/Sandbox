@@ -4,13 +4,20 @@ namespace Lift\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Lift\Crypto\CryptoAwareInterface;
+use Zend\Crypt\Password\Bcrypt;
 use Zend\Crypt\Password\PasswordInterface;
+use ZF\OAuth2\Doctrine\Entity\AccessToken;
+use ZF\OAuth2\Doctrine\Entity\AuthorizationCode;
+use ZF\OAuth2\Doctrine\Entity\Client;
+use ZF\OAuth2\Doctrine\Entity\RefreshToken;
+use ZF\OAuth2\Doctrine\Entity\UserInterface;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="user")
  */
-class UserEntity implements CryptoAwareInterface
+//class UserEntity implements CryptoAwareInterface
+class UserEntity implements UserInterface, \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -19,6 +26,34 @@ class UserEntity implements CryptoAwareInterface
      * @var int
      */
     private $id;
+
+    /**
+     * @var Client
+     * @ORM\OneToMany(targetEntity="ZF\OAuth2\Doctrine\Entity\Client", mappedBy="user")
+     * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
+     */
+    protected $client;
+
+    /**
+     * @var AccessToken
+     * @ORM\OneToMany(targetEntity="ZF\OAuth2\Doctrine\Entity\AccessToken", mappedBy="user")
+     * @ORM\JoinColumn(name="access_token_id", referencedColumnName="id")
+     */
+    protected $accessToken;
+
+    /**
+     * @var AuthorizationCode
+     * @ORM\OneToMany(targetEntity="ZF\OAuth2\Doctrine\Entity\AuthorizationCode", mappedBy="user")
+     * @ORM\JoinColumn(name="authorization_code_id", referencedColumnName="id")
+     */
+    protected $authorizationCode;
+
+    /**
+     * @var RefreshToken
+     * @ORM\OneToMany(targetEntity="ZF\OAuth2\Doctrine\Entity\RefreshToken", mappedBy="user")
+     * @ORM\JoinColumn(name="refresh_token_id", referencedColumnName="id")
+     */
+    protected $refreshToken;
 
     /**
      * @var string
@@ -133,6 +168,7 @@ class UserEntity implements CryptoAwareInterface
      */
     public function verify(string $password)
     {
+//        return $password == $this->password;
         return $this->getCrypto()->verify($password, $this->password);
     }
 
@@ -153,7 +189,8 @@ class UserEntity implements CryptoAwareInterface
     public function getCrypto()
     {
         if(!$this->crypto){
-            throw new \Exception("No cryptography found");
+            $this->crypto = new Bcrypt();
+//            throw new \Exception("No cryptography found");
         }
 
         return $this->crypto;
@@ -181,5 +218,49 @@ class UserEntity implements CryptoAwareInterface
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    public function getAccessToken()
+    {
+        return $this->accessToken;
+    }
+
+    public function getAuthorizationCode()
+    {
+        return $this->authorizationCode;
+    }
+
+    public function getRefreshToken()
+    {
+        return $this->refreshToken;
+    }
+
+    // This function is required for the Authentication process.
+    // It expects the entity to be used for authentication to implement UserInterface and to implement this function.
+    // It is used in ZF\OAuth2\Doctrine\Adapter\DoctrineAdapter class.
+    public function getArrayCopy()
+    {
+        return [
+            'id' => $this->getId(),
+            'userName' => $this->getUserName(),
+            'password' => $this->getPassword(),
+            'firstName' => $this->getFirstName(),
+            'lastName' => $this->getLastName(),
+            'role' => $this->getRole(),
+        ];
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function jsonSerialize()
+    {
+        return $this->getArrayCopy();
     }
 }

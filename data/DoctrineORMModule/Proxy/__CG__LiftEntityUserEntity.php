@@ -31,20 +31,22 @@ class UserEntity extends \Lift\Entity\UserEntity implements \Doctrine\ORM\Proxy\
     public $__isInitialized__ = false;
 
     /**
-     * @var array properties to be lazy loaded, with keys being the property
-     *            names and values being their default values
+     * @var array<string, null> properties to be lazy loaded, indexed by property name
+     */
+    public static $lazyPropertiesNames = array (
+);
+
+    /**
+     * @var array<string, mixed> default values of properties to be lazy loaded, with keys being the property names
      *
      * @see \Doctrine\Common\Proxy\Proxy::__getLazyProperties
      */
-    public static $lazyPropertiesDefaults = [];
+    public static $lazyPropertiesDefaults = array (
+);
 
 
 
-    /**
-     * @param \Closure $initializer
-     * @param \Closure $cloner
-     */
-    public function __construct($initializer = null, $cloner = null)
+    public function __construct(?\Closure $initializer = null, ?\Closure $cloner = null)
     {
 
         $this->__initializer__ = $initializer;
@@ -64,10 +66,10 @@ class UserEntity extends \Lift\Entity\UserEntity implements \Doctrine\ORM\Proxy\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'id', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'userName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'firstName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'lastName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'password', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'role', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'crypto'];
+            return ['__isInitialized__', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'id', 'client', 'accessToken', 'authorizationCode', 'refreshToken', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'userName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'firstName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'lastName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'password', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'role', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'crypto'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'id', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'userName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'firstName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'lastName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'password', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'role', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'crypto'];
+        return ['__isInitialized__', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'id', 'client', 'accessToken', 'authorizationCode', 'refreshToken', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'userName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'firstName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'lastName', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'password', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'role', '' . "\0" . 'Lift\\Entity\\UserEntity' . "\0" . 'crypto'];
     }
 
     /**
@@ -82,7 +84,7 @@ class UserEntity extends \Lift\Entity\UserEntity implements \Doctrine\ORM\Proxy\
 
                 $existingProperties = get_object_vars($proxy);
 
-                foreach ($proxy->__getLazyProperties() as $property => $defaultValue) {
+                foreach ($proxy::$lazyPropertiesDefaults as $property => $defaultValue) {
                     if ( ! array_key_exists($property, $existingProperties)) {
                         $proxy->$property = $defaultValue;
                     }
@@ -165,6 +167,7 @@ class UserEntity extends \Lift\Entity\UserEntity implements \Doctrine\ORM\Proxy\
     /**
      * {@inheritDoc}
      * @internal generated method: use only when explicitly handling proxy specific loading logic
+     * @deprecated no longer in use - generated code now relies on internal components rather than generated public API
      * @static
      */
     public function __getLazyProperties()
@@ -329,6 +332,72 @@ class UserEntity extends \Lift\Entity\UserEntity implements \Doctrine\ORM\Proxy\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
 
         return parent::getId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getClient()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getClient', []);
+
+        return parent::getClient();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAccessToken()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAccessToken', []);
+
+        return parent::getAccessToken();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAuthorizationCode()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAuthorizationCode', []);
+
+        return parent::getAuthorizationCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRefreshToken()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRefreshToken', []);
+
+        return parent::getRefreshToken();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getArrayCopy()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getArrayCopy', []);
+
+        return parent::getArrayCopy();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function jsonSerialize()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'jsonSerialize', []);
+
+        return parent::jsonSerialize();
     }
 
 }

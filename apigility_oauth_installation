@@ -1,0 +1,39 @@
+Installation (to an existing project):
+
+•	composer require --dev zfcampus/zf-asset-manager (required for rendering the admin ui)
+•	composer require zfcampus/zf-apigility
+•	composer require --dev zfcampus/zf-apigility-admin
+•	composer require --dev zfcampus/zf-development-mode
+
+•	Ensure that development mode is enabled
+(“.\vendor\bin\zf-development-mode status” should return ENABLED. If not then run “.\vendor\bin\zf-development-mode enable”)
+
+
+Authentication and Authorization using doctrine:
+
+- Oauth doctrine must be installed:
+composer require api-skeletons/zf-oauth2-doctrine
+- Copy the file at vendor/api-skeletons/zf-oauth2-doctrine/config/oauth2.doctrine-orm.global.php.dist to config/autoload directory.
+
+Update the database schema to get the tables
+
+User entity should implement ZF\OAuth2\Doctrine\Entity\UserInterface and should implement getArrayCopy() function
+
+'zf-mvc-auth' => array(
+    'authentication' => array(
+        'adapters' => array(
+            'oauth2_doctrine' => array(
+                'adapter' => 'ZF\\MvcAuth\\Authentication\\OAuth2Adapter',
+                'storage' => array(
+                    'storage' => 'oauth2.doctrineadapter.default',
+                    'route' => '/oauth',
+                ),
+            ),
+        ),
+    ),
+),
+
+For the Authorization header to be accessible, the following line should be added in .htaccess file just after the RewriteEngine On line:
+        “RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]”
+
+
